@@ -4,22 +4,24 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build-set-windows:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       id: checkout-code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: Setup glslangValidator
-      shell: pwsh
+      shell: bash
       run: |
-        choco install vulkan-sdk -y
-        Write-Output "$([System.Environment]::GetEnvironmentVariable('VULKAN_SDK', 'Machine'))\Bin" `
-          | Out-File -FilePath "${Env:GITHUB_PATH}" -Append
-
+        set -eux
+        curl -s https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe -o VulkanSDK.exe
+        ./VulkanSDK.exe --accept-licenses --default-answer --confirm-command install
+        export VULKAN_SDK="C:\\VulkanSDK\\$(ls C:/VulkanSDK)"
+        echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
+        echo "$VULKAN_SDK\\Bin" >> $GITHUB_PATH
     - name: Setup Meson
       shell: pwsh
       run: pip install meson

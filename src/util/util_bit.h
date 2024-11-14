@@ -17,6 +17,7 @@
 #include "util_math.h"
 
 #include <cstring>
+#include <cstdint>
 #include <iterator>
 #include <type_traits>
 
