@@ -3916,7 +3916,7 @@ namespace dxvk {
     // SM1 level hardware
     enabled.core.features.depthClamp = VK_TRUE;
     enabled.core.features.depthBiasClamp = VK_TRUE;
-    enabled.core.features.fillModeNonSolid = VK_TRUE;
+    enabled.core.features.fillModeNonSolid = supported.core.features.fillModeNonSolid;
     enabled.core.features.pipelineStatisticsQuery = supported.core.features.pipelineStatisticsQuery;
     enabled.core.features.sampleRateShading = VK_TRUE;
     enabled.core.features.samplerAnisotropy = supported.core.features.samplerAnisotropy;
@@ -3924,7 +3924,7 @@ namespace dxvk {
     enabled.core.features.shaderCullDistance = VK_TRUE;
 
     // Ensure we support real BC formats and unofficial vendor ones.
-    enabled.core.features.textureCompressionBC = VK_TRUE;
+    enabled.core.features.textureCompressionBC = supported.core.features.textureCompressionBC;
 
     enabled.extDepthClipEnable.depthClipEnable = supported.extDepthClipEnable.depthClipEnable;
     enabled.extHostQueryReset.hostQueryReset = VK_TRUE;
@@ -3933,7 +3933,7 @@ namespace dxvk {
     enabled.core.features.occlusionQueryPrecise = VK_TRUE;
 
     // SM3 level hardware
-    enabled.core.features.multiViewport = VK_TRUE;
+    enabled.core.features.multiViewport = supported.core.features.multiViewport;
     enabled.core.features.independentBlend = VK_TRUE;
 
     // D3D10 level hardware supports this in D3D9 native.
