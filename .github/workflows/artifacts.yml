@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Checkout code
       id: checkout-code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
@@ -28,7 +28,7 @@ jobs:
 
     - name: Upload artifacts
       id: upload-artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: dxvk-${{ env.VERSION_NAME }}
         path: build/dxvk-${{ env.VERSION_NAME }}
