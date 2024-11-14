@@ -3920,8 +3920,8 @@ namespace dxvk {
     enabled.core.features.pipelineStatisticsQuery = supported.core.features.pipelineStatisticsQuery;
     enabled.core.features.sampleRateShading = VK_TRUE;
     enabled.core.features.samplerAnisotropy = supported.core.features.samplerAnisotropy;
-    enabled.core.features.shaderClipDistance = VK_TRUE;
-    enabled.core.features.shaderCullDistance = VK_TRUE;
+    enabled.core.features.shaderClipDistance = supported.core.features.shaderClipDistance;
+    enabled.core.features.shaderCullDistance = supported.core.features.shaderCullDistance;
 
     // Ensure we support real BC formats and unofficial vendor ones.
     enabled.core.features.textureCompressionBC = supported.core.features.textureCompressionBC;
