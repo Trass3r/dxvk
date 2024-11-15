@@ -1958,13 +1958,13 @@ namespace dxvk {
     if (featureLevel >= D3D_FEATURE_LEVEL_9_1) {
       enabled.core.features.depthClamp                            = VK_TRUE;
       enabled.core.features.depthBiasClamp                        = VK_TRUE;
-      enabled.core.features.fillModeNonSolid                      = VK_TRUE;
+      enabled.core.features.fillModeNonSolid                      = supported.core.features.fillModeNonSolid;
       enabled.core.features.pipelineStatisticsQuery               = supported.core.features.pipelineStatisticsQuery;
       enabled.core.features.sampleRateShading                     = VK_TRUE;
       enabled.core.features.samplerAnisotropy                     = supported.core.features.samplerAnisotropy;
-      enabled.core.features.shaderClipDistance                    = VK_TRUE;
-      enabled.core.features.shaderCullDistance                    = VK_TRUE;
-      enabled.core.features.textureCompressionBC                  = VK_TRUE;
+      enabled.core.features.shaderClipDistance                    = supported.core.features.shaderClipDistance;
+      enabled.core.features.shaderCullDistance                    = supported.core.features.shaderCullDistance;
+      enabled.core.features.textureCompressionBC                  = supported.core.features.textureCompressionBC;
       enabled.extDepthClipEnable.depthClipEnable                  = supported.extDepthClipEnable.depthClipEnable;
       enabled.extHostQueryReset.hostQueryReset                    = VK_TRUE;
     }
@@ -1975,7 +1975,7 @@ namespace dxvk {
     
     if (featureLevel >= D3D_FEATURE_LEVEL_9_3) {
       enabled.core.features.independentBlend                      = VK_TRUE;
-      enabled.core.features.multiViewport                         = VK_TRUE;
+      enabled.core.features.multiViewport                         = supported.core.features.multiViewport;
     }
     
     if (featureLevel >= D3D_FEATURE_LEVEL_10_0) {
@@ -1988,7 +1988,7 @@ namespace dxvk {
     }
     
     if (featureLevel >= D3D_FEATURE_LEVEL_10_1) {
-      enabled.core.features.dualSrcBlend                          = VK_TRUE;
+      enabled.core.features.dualSrcBlend                          = supported.core.features.dualSrcBlend;
       enabled.core.features.imageCubeArray                        = VK_TRUE;
     }
     
@@ -2003,7 +2003,7 @@ namespace dxvk {
     }
     
     if (featureLevel >= D3D_FEATURE_LEVEL_11_1) {
-      enabled.core.features.logicOp                               = VK_TRUE;
+      enabled.core.features.logicOp                               = supported.core.features.logicOp;
       enabled.core.features.variableMultisampleRate               = VK_TRUE;
       enabled.core.features.vertexPipelineStoresAndAtomics        = VK_TRUE;
     }
