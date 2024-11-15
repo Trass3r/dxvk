@@ -16,7 +16,7 @@ jobs:
     - name: Setup glslangValidator
       shell: bash
       run: |
-        wget https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe
+        curl https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe
         ./Vulkan SDK*.exe --accept-licenses --default-answer --confirm-command install
         echo "VULKAN_SDK=$VULKAN_SDK" >> $GITHUB_ENV
         echo "$VULKAN_SDK/Bin" >> $GITHUB_PATH
