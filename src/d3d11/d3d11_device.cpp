@@ -1984,7 +1984,7 @@ namespace dxvk {
       enabled.core.features.shaderImageGatherExtended             = VK_TRUE;
       enabled.core.features.variableMultisampleRate               = supported.core.features.variableMultisampleRate;
       enabled.extTransformFeedback.transformFeedback              = VK_TRUE;
-      enabled.extTransformFeedback.geometryStreams                = supported.core.features.geometryStreams;
+      enabled.extTransformFeedback.geometryStreams                = supported.extTransformFeedback.geometryStreams;
     }
     
     if (featureLevel >= D3D_FEATURE_LEVEL_10_1) {
