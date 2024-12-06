@@ -3892,7 +3892,7 @@ namespace dxvk {
     DxvkDeviceFeatures enabled = {};
 
     // Geometry shaders are used for some meta ops
-    enabled.core.features.geometryShader = VK_TRUE;
+    enabled.core.features.geometryShader = VK_FALSE;
     enabled.core.features.robustBufferAccess = VK_TRUE;
     enabled.extRobustness2.robustBufferAccess2 = supported.extRobustness2.robustBufferAccess2;
 
