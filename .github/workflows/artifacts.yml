@@ -26,10 +26,10 @@ jobs:
           ./package-release.sh ${VERSION_NAME} build --no-package
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
-    - name: Upload artifacts
-      id: upload-artifacts
-      uses: actions/upload-artifact@v4
+    - name: "Create Release"
+      uses: softprops/action-gh-release@v2
       with:
-        name: dxvk-${{ env.VERSION_NAME }}
-        path: build/dxvk-${{ env.VERSION_NAME }}
-        if-no-files-found: error
+        name: "DXVK 1.10-${{ env.VERSION_NAME }} (Stripped Down Requirements)"
+        tag_name: ${{ env.VERSION_NAME }}
+        files: build/dxvk-${{ env.VERSION_NAME }}
+    
