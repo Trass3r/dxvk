@@ -435,6 +435,8 @@ namespace dxvk {
     enabledFeatures.extRobustness2.robustImageAccess2 = m_deviceFeatures.extRobustness2.robustImageAccess2;
     enabledFeatures.extRobustness2.nullDescriptor = m_deviceFeatures.extRobustness2.nullDescriptor;
 
+    enabledFeatures.vk12.descriptorBindingPartiallyBound = VK_TRUE;
+
     // We use this to avoid decompressing SPIR-V shaders in some situations
     enabledFeatures.extShaderModuleIdentifier.shaderModuleIdentifier =
       m_deviceFeatures.extShaderModuleIdentifier.shaderModuleIdentifier;
