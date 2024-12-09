@@ -1938,23 +1938,23 @@ namespace dxvk {
     DxvkDeviceFeatures enabled   = {};
 
     // Required for feature level 10_1
-    enabled.core.features.depthBiasClamp                          = VK_TRUE;
-    enabled.core.features.depthClamp                              = VK_TRUE;
-    enabled.core.features.dualSrcBlend                            = VK_TRUE;
-    enabled.core.features.fillModeNonSolid                        = VK_TRUE;
+    enabled.core.features.depthClamp                              = supported.core.features.depthClamp;
+    enabled.core.features.depthBiasClamp                          = supported.core.features.depthBiasClamp;
+    enabled.core.features.dualSrcBlend                            = supported.core.features.dualSrcBlend;
+    enabled.core.features.fillModeNonSolid                        = supported.core.features.fillModeNonSolid;
     enabled.core.features.fullDrawIndexUint32                     = VK_TRUE;
     enabled.core.features.geometryShader                          = VK_TRUE;
     enabled.core.features.imageCubeArray                          = VK_TRUE;
     enabled.core.features.independentBlend                        = VK_TRUE;
-    enabled.core.features.multiViewport                           = VK_TRUE;
+    enabled.core.features.multiViewport                           = supported.core.features.multiViewport;
     enabled.core.features.occlusionQueryPrecise                   = VK_TRUE;
     enabled.core.features.pipelineStatisticsQuery                 = supported.core.features.pipelineStatisticsQuery;
     enabled.core.features.sampleRateShading                       = VK_TRUE;
     enabled.core.features.samplerAnisotropy                       = supported.core.features.samplerAnisotropy;
-    enabled.core.features.shaderClipDistance                      = VK_TRUE;
-    enabled.core.features.shaderCullDistance                      = VK_TRUE;
+    enabled.core.features.shaderClipDistance                      = supported.core.features.shaderClipDistance;
+    enabled.core.features.shaderCullDistance                      = supported.core.features.shaderCullDistance;
     enabled.core.features.shaderImageGatherExtended               = VK_TRUE;
-    enabled.core.features.textureCompressionBC                    = VK_TRUE;
+    enabled.core.features.textureCompressionBC                    = supported.core.features.textureCompressionBC;
 
     enabled.vk12.samplerMirrorClampToEdge                         = VK_TRUE;
 
@@ -1964,7 +1964,7 @@ namespace dxvk {
     enabled.extCustomBorderColor.customBorderColorWithoutFormat   = supported.extCustomBorderColor.customBorderColorWithoutFormat;
 
     enabled.extTransformFeedback.transformFeedback                = VK_TRUE;
-    enabled.extTransformFeedback.geometryStreams                  = VK_TRUE;
+    enabled.extTransformFeedback.geometryStreams                  = supported.extTransformFeedback.geometryStreams;
 
     enabled.extVertexAttributeDivisor.vertexAttributeInstanceRateDivisor      = supported.extVertexAttributeDivisor.vertexAttributeInstanceRateDivisor;
     enabled.extVertexAttributeDivisor.vertexAttributeInstanceRateZeroDivisor  = supported.extVertexAttributeDivisor.vertexAttributeInstanceRateZeroDivisor;
