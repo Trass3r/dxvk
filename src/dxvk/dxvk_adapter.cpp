@@ -167,7 +167,7 @@ namespace dxvk {
 
 #define CHECK_FEATURE_NEED(feature) \
   (m_deviceFeatures.feature         \
-       || !required.feature)
+       || !required.feature || (Logger::err("Missing feature: " #feature), false))
 
   bool DxvkAdapter::checkFeatureSupport(const DxvkDeviceFeatures& required) const {
     return CHECK_FEATURE_NEED(core.features.robustBufferAccess)
