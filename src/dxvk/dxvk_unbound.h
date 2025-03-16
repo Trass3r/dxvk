@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-
 #include "dxvk_buffer.h"
 #include "dxvk_image.h"
 #include "dxvk_sampler.h"
@@ -32,7 +30,9 @@ namespace dxvk {
      * and index buffers.
      * \returns Dummy buffer handle
      */
-    VkBuffer bufferHandle();
+    VkBuffer bufferHandle() const {
+      return m_buffer->getSliceHandle().handle;
+    }
     
     /**
      * \brief Dummy sampler descriptor
@@ -42,22 +42,18 @@ namespace dxvk {
      * still require different behaviour.
      * \returns Dummy sampler descriptor
      */
-    VkSampler samplerHandle();
+    VkSampler samplerHandle() const {
+      return m_sampler->handle();
+    }
     
   private:
     
-    DxvkDevice*             m_device;
-
-    std::atomic<VkSampler>  m_samplerHandle = { VK_NULL_HANDLE };
-    std::atomic<VkBuffer>   m_bufferHandle  = { VK_NULL_HANDLE };
-
-    dxvk::mutex             m_mutex;
-    Rc<DxvkSampler>         m_sampler;
-    Rc<DxvkBuffer>          m_buffer;
+    Rc<DxvkSampler> m_sampler;
+    Rc<DxvkBuffer>  m_buffer;
     
-    Rc<DxvkSampler> createSampler();
+    Rc<DxvkSampler> createSampler(DxvkDevice* dev);
     
-    Rc<DxvkBuffer> createBuffer();
+    Rc<DxvkBuffer> createBuffer(DxvkDevice* dev);
     
   };
   
