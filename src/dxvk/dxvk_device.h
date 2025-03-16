@@ -465,6 +465,15 @@ namespace dxvk {
             int64_t             used) {
       m_adapter->notifyMemoryStats(heap, allocated, used);
     }
+    
+    /**
+     * \brief Initializes dummy resources
+     * 
+     * Should be called after creating the device in
+     * case the device initialization was successful
+     * and the device is usable.
+     */
+    DxvkDevice* initResources();
 
     /**
      * \brief Registers a shader
