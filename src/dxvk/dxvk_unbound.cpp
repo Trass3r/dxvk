@@ -21,7 +21,7 @@ namespace dxvk {
   
   
   void DxvkUnboundResources::clearResources(DxvkDevice* dev) {
-    const Rc<DxvkContext> ctx = dev->createContext(DxvkContextType::Supplementary);
+    const Rc<DxvkContext> ctx = dev->createContext();
     ctx->beginRecording(dev->createCommandList());
     
     this->clearBuffer(ctx, m_buffer);
@@ -30,33 +30,22 @@ namespace dxvk {
     this->clearImage(ctx, m_image3D);
     
     dev->submitCommandList(
-      ctx->endRecording(),
-      VK_NULL_HANDLE,
-      VK_NULL_HANDLE);
+      ctx->endRecording(nullptr),
+      nullptr, 0, nullptr);
   }
   
   
   Rc<DxvkSampler> DxvkUnboundResources::createSampler(DxvkDevice* dev) {
-    DxvkSamplerCreateInfo info;
-    info.minFilter      = VK_FILTER_LINEAR;
-    info.magFilter      = VK_FILTER_LINEAR;
-    info.mipmapMode     = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-    info.mipmapLodBias  = 0.0f;
-    info.mipmapLodMin   = -256.0f;
-    info.mipmapLodMax   =  256.0f;
-    info.useAnisotropy  = VK_FALSE;
-    info.maxAnisotropy  = 1.0f;
-    info.addressModeU   = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    info.addressModeV   = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    info.addressModeW   = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-    info.compareToDepth = VK_FALSE;
-    info.compareOp      = VK_COMPARE_OP_NEVER;
-    info.reductionMode  = VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE;
-    info.borderColor    = VkClearColorValue();
-    info.usePixelCoord  = VK_FALSE;
-    info.nonSeamless    = VK_FALSE;
-    
-    return dev->createSampler(info);
+    DxvkSamplerKey samplerKey = {};
+    samplerKey.setFilter(VK_FILTER_LINEAR, VK_FILTER_LINEAR, VK_SAMPLER_MIPMAP_MODE_LINEAR);
+    samplerKey.setAddressModes(VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+    samplerKey.setLodRange(-256.0f, 256.0f, 0);
+    samplerKey.setAniso(0);
+    samplerKey.setDepthCompare(VK_FALSE, VK_COMPARE_OP_NEVER);
+    samplerKey.setReduction(VK_SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE);
+    samplerKey.setBorderColor(VkClearColorValue());
+    samplerKey.setUsePixelCoordinates(VK_FALSE);
+    return dev->createSampler(samplerKey);
   }
   
   
@@ -78,20 +67,22 @@ namespace dxvk {
                     | VK_ACCESS_SHADER_WRITE_BIT;
     info.debugName  = "Null buffer";
     
-    return dev->createBuffer(info,
-      VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    Rc<DxvkBuffer> buffer = dev->createBuffer(info, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+    std::memset(buffer->mapPtr(0), 0, info.size);
+    return buffer;
   }
   
   
   Rc<DxvkBufferView> DxvkUnboundResources::createBufferView(
           DxvkDevice*     dev,
     const Rc<DxvkBuffer>& buffer) {
-    DxvkBufferViewCreateInfo info;
-    info.format      = VK_FORMAT_R32_UINT;
-    info.rangeOffset = 0;
-    info.rangeLength = buffer->info().size;
-    
-    return dev->createBufferView(buffer, info);
+    DxvkBufferViewKey info;
+    info.format = VK_FORMAT_R32_UINT;
+    info.offset = 0;
+    info.size   = buffer->info().size;
+    info.usage  = buffer->info().usage;
+    return buffer->createView(info);
   }
   
   
@@ -115,6 +106,7 @@ namespace dxvk {
     info.access      = VK_ACCESS_SHADER_READ_BIT;
     info.layout      = VK_IMAGE_LAYOUT_GENERAL;
     info.tiling      = VK_IMAGE_TILING_OPTIMAL;
+    info.debugName   = "Null Image";
     
     if (type == VK_IMAGE_TYPE_2D)
       info.flags       |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
@@ -130,21 +122,17 @@ namespace dxvk {
           VkFormat        format,
           VkImageViewType type,
           uint32_t        layers) {
-    DxvkImageViewCreateInfo info;
-    info.type         = type;
-    info.format       = format;
-    info.usage        = VK_IMAGE_USAGE_SAMPLED_BIT
-                      | VK_IMAGE_USAGE_STORAGE_BIT;
-    info.aspect       = VK_IMAGE_ASPECT_COLOR_BIT;
-    info.minLevel     = 0;
-    info.numLevels    = 1;
-    info.minLayer     = 0;
-    info.numLayers    = layers;
-    info.swizzle      = VkComponentMapping {
-      VK_COMPONENT_SWIZZLE_ZERO, VK_COMPONENT_SWIZZLE_ZERO,
-      VK_COMPONENT_SWIZZLE_ZERO, VK_COMPONENT_SWIZZLE_ZERO };
-    
-    return dev->createImageView(image, info);
+    DxvkImageViewKey info;
+    info.viewType = type;
+    info.format = format;
+    info.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT;
+    info.aspects = VK_IMAGE_ASPECT_COLOR_BIT;
+    info.mipIndex = 0;
+    info.mipCount = 1;
+    info.layerIndex = 0;
+    info.layerCount = layers;
+
+    return image->createView(info);
   }
   
   
@@ -161,7 +149,7 @@ namespace dxvk {
   }
 
 
-  const DxvkImageView* DxvkUnboundResources::getImageView(VkImageViewType type, bool sampled) const {
+  DxvkImageView* DxvkUnboundResources::getImageView(VkImageViewType type, bool sampled) const {
     auto views = sampled ? &m_viewsSampled : &m_viewsStorage;
 
     switch (type) {
