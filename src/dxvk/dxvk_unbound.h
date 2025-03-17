@@ -90,7 +90,7 @@ namespace dxvk {
       VkDescriptorImageInfo result;
       result.sampler     = m_sampler->handle();
       result.imageView   = view->handle();
-      result.imageLayout = view->imageInfo().layout;
+      result.imageLayout = view->image()->info().layout;
       return result;
     }
     
@@ -110,7 +110,7 @@ namespace dxvk {
       VkDescriptorImageInfo result;
       result.sampler     = VK_NULL_HANDLE;
       result.imageView   = view->handle();
-      result.imageLayout = view->imageInfo().layout;
+      result.imageLayout = view->image()->info().layout;
       return result;
     }
     
@@ -170,7 +170,7 @@ namespace dxvk {
             DxvkDevice*     dev,
             VkFormat        format);
 
-    const DxvkImageView* getImageView(
+    DxvkImageView* getImageView(
             VkImageViewType type,
             bool            sampled) const;
     
