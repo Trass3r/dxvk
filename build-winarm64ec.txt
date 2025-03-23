@@ -1,0 +1,15 @@
+[binaries]
+c = 'arm64ec-w64-mingw32-gcc'
+cpp = 'arm64ec-w64-mingw32-g++'
+ar = 'arm64ec-w64-mingw32-ar'
+strip = 'strip'
+windres = 'arm64ec-w64-mingw32-windres'
+ld = 'arm64ec-w64-mingw32-ld'
+widl = 'arm64ec-w64-mingw32-widl'
+pkgconfig = 'aarch64-linux-gnu-pkg-config'
+
+[host_machine]
+system = 'windows'
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+endian = 'little'
