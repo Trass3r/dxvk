@@ -62,22 +62,26 @@ function build_arch {
   cd "$DXVK_SRC_DIR"
 
   opt_strip=
-  if [ $opt_devbuild -eq 0 ]; then
-    opt_strip=--strip
-  fi
+  #if [ $opt_devbuild -eq 0 ]; then
+  #  opt_strip=--strip
+  #fi
 
+  # instead of --debug
+  CXXFLAGS='-fno-omit-frame-pointer -g1 -ffunction-sections -fdata-sections' \
+  LDFLAGS='-Wl,--gc-sections,--print-gc-sections' \
   meson setup --cross-file "$DXVK_SRC_DIR/$crossfile$1.txt" \
         --buildtype "release"                               \
+        -Db_lto=true \
         --prefix "$DXVK_BUILD_DIR"                          \
         $opt_strip                                          \
         --bindir "x$1"                                      \
         --libdir "x$1"                                      \
-        -Db_ndebug=if-release                               \
+        -Db_ndebug=false                                    \
         -Dbuild_id=$opt_buildid                             \
         "$DXVK_BUILD_DIR/build.$1"
 
   cd "$DXVK_BUILD_DIR/build.$1"
-  ninja install
+  ninja -v install
 
   if [ $opt_devbuild -eq 0 ]; then
     # get rid of some useless .a files
