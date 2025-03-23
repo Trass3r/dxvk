@@ -86,6 +86,7 @@ function build_arch {
   if [ $opt_devbuild -eq 0 ]; then
     # get rid of some useless .a files
     rm "$DXVK_BUILD_DIR/$3/"*.!(dll)
+    cp -v "$DXVK_BUILD_DIR/build.$1/src/"*/*.pdb "$DXVK_BUILD_DIR/$3/"
     rm -R "$DXVK_BUILD_DIR/build.$1"
   fi
 }
