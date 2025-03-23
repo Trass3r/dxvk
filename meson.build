@@ -26,6 +26,7 @@ compiler_args = [
   '-Wno-extern-c-compat',
   '-Wno-unused-const-variable',
   '-Wno-missing-braces',
+  '-Wno-nontrivial-memcall',
 ]
 
 link_args = []
