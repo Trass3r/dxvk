@@ -56,7 +56,7 @@ while [ $# -gt 0 ]; do
 done
 
 function build_arch {
-  export WINEARCH="win$1"
+  export WINEARCH="win$2"
   export WINEPREFIX="$DXVK_BUILD_DIR/wine.$1"
   
   cd "$DXVK_SRC_DIR"
@@ -74,8 +74,8 @@ function build_arch {
         -Db_lto=true \
         --prefix "$DXVK_BUILD_DIR"                          \
         $opt_strip                                          \
-        --bindir "x$1"                                      \
-        --libdir "x$1"                                      \
+        --bindir "$3"                                      \
+        --libdir "$3"                                      \
         -Db_ndebug=false                                    \
         -Dbuild_id=$opt_buildid                             \
         "$DXVK_BUILD_DIR/build.$1"
@@ -85,7 +85,7 @@ function build_arch {
 
   if [ $opt_devbuild -eq 0 ]; then
     # get rid of some useless .a files
-    rm "$DXVK_BUILD_DIR/x$1/"*.!(dll)
+    rm "$DXVK_BUILD_DIR/$3/"*.!(dll)
     rm -R "$DXVK_BUILD_DIR/build.$1"
   fi
 }
@@ -97,10 +97,12 @@ function package {
 }
 
 if [ $opt_32_only -eq 0 ]; then
-  build_arch 64
+  build_arch 64 64 x64
+  #build_arch aarch64 64 aarch64
+  build_arch arm64ec 64 arm64ec
 fi
 if [ $opt_64_only -eq 0 ]; then
-  build_arch 32
+  build_arch 32 32 x32
 fi
 
 if [ $opt_nopackage -eq 0 ]; then
