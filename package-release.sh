@@ -71,7 +71,7 @@ function build_arch {
   LDFLAGS='-Wl,--gc-sections' \
   meson setup --cross-file "$DXVK_SRC_DIR/$crossfile$1.txt" \
         --buildtype "release"                               \
-        -Db_lto=true \
+        $( [[ "$1" != "arm64ec" ]] && echo "-Db_lto=true" ) \
         --prefix "$DXVK_BUILD_DIR"                          \
         $opt_strip                                          \
         --bindir "$3"                                      \
