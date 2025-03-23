@@ -67,8 +67,8 @@ function build_arch {
   #fi
 
   # instead of --debug
-  CXXFLAGS='-fno-omit-frame-pointer -g1 -ffunction-sections -fdata-sections' \
-  LDFLAGS='-Wl,--gc-sections' \
+  CXXFLAGS='-fno-omit-frame-pointer -g1 -gcodeview -ffunction-sections -fdata-sections' \
+  LDFLAGS='-Wl,--gc-sections,--pdb=' \
   meson setup --cross-file "$DXVK_SRC_DIR/$crossfile$1.txt" \
         --buildtype "release"                               \
         $( [[ "$1" != "arm64ec" ]] && echo "-Db_lto=true" ) \
