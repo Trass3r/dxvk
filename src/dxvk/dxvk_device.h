@@ -468,6 +468,15 @@ namespace dxvk {
     }
 
     /**
+     * \brief Initializes dummy resources
+     *
+     * Should be called after creating the device in
+     * case the device initialization was successful
+     * and the device is usable.
+     */
+    DxvkDevice *initResources();
+
+    /**
      * \brief Registers a shader
      * \param [in] shader Newly compiled shader
      */
@@ -593,7 +602,15 @@ namespace dxvk {
      * used by the GPU can be safely destroyed.
      */
     void waitForIdle();
-    
+
+    /**
+     * \brief Retrieves dummy resources
+     * \returns Dummy resources
+     */
+    DxvkUnboundResources& dummyResources() {
+      return m_objects.dummyResources();
+    }
+
   private:
     
     DxvkOptions                 m_options;

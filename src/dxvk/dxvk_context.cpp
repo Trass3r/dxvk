@@ -6436,9 +6436,7 @@ namespace dxvk {
                 m_cmd->track(view->image(), DxvkAccess::Read);
               }
             } else {
-              descriptorInfo.image.sampler = VK_NULL_HANDLE;
-              descriptorInfo.image.imageView = VK_NULL_HANDLE;
-              descriptorInfo.image.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+              descriptorInfo.image = m_common->dummyResources().imageViewDescriptor(binding.viewType, true);
             }
           } break;
 
@@ -6461,9 +6459,7 @@ namespace dxvk {
               m_cmd->track(res.imageView->image(), (binding.access & vk::AccessWriteMask)
                 ? DxvkAccess::Write : DxvkAccess::Read);
             } else {
-              descriptorInfo.image.sampler = VK_NULL_HANDLE;
-              descriptorInfo.image.imageView = VK_NULL_HANDLE;
-              descriptorInfo.image.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+              descriptorInfo.image = m_common->dummyResources().imageViewDescriptor(binding.viewType, false);
             }
           } break;
 
@@ -6497,9 +6493,7 @@ namespace dxvk {
                 m_cmd->track(res.sampler);
               }
             } else {
-              descriptorInfo.image.sampler = m_common->dummyResources().samplerHandle();
-              descriptorInfo.image.imageView = VK_NULL_HANDLE;
-              descriptorInfo.image.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+              descriptorInfo.image = m_common->dummyResources().imageSamplerDescriptor(binding.viewType);
             }
           } break;
 
@@ -6514,7 +6508,7 @@ namespace dxvk {
 
               m_cmd->track(res.bufferView->buffer(), DxvkAccess::Read);
             } else {
-              descriptorInfo.texelBuffer = VK_NULL_HANDLE;
+              descriptorInfo.texelBuffer = m_common->dummyResources().bufferViewDescriptor();
             }
           } break;
 
@@ -6530,7 +6524,7 @@ namespace dxvk {
               m_cmd->track(res.bufferView->buffer(), (binding.access & vk::AccessWriteMask)
                 ? DxvkAccess::Write : DxvkAccess::Read);
             } else {
-              descriptorInfo.texelBuffer = VK_NULL_HANDLE;
+              descriptorInfo.texelBuffer = m_common->dummyResources().bufferViewDescriptor();
             }
           } break;
 
@@ -6545,7 +6539,7 @@ namespace dxvk {
 
               m_cmd->track(res.bufferSlice.buffer(), DxvkAccess::Read);
             } else {
-              descriptorInfo.buffer.buffer = VK_NULL_HANDLE;
+              descriptorInfo.buffer.buffer = m_common->dummyResources().bufferHandle();
               descriptorInfo.buffer.offset = 0;
               descriptorInfo.buffer.range = VK_WHOLE_SIZE;
             }
@@ -6563,7 +6557,7 @@ namespace dxvk {
               m_cmd->track(res.bufferSlice.buffer(), (binding.access & vk::AccessWriteMask)
                 ? DxvkAccess::Write : DxvkAccess::Read);
             } else {
-              descriptorInfo.buffer.buffer = VK_NULL_HANDLE;
+              descriptorInfo.buffer.buffer = m_common->dummyResources().bufferHandle();
               descriptorInfo.buffer.offset = 0;
               descriptorInfo.buffer.range = VK_WHOLE_SIZE;
             }
@@ -6899,11 +6893,13 @@ namespace dxvk {
     if (unlikely(!m_state.gp.state.il.bindingCount()))
       return;
     
-    std::array<VkBuffer,     MaxNumVertexBindings> buffers;
-    std::array<VkDeviceSize, MaxNumVertexBindings> offsets;
-    std::array<VkDeviceSize, MaxNumVertexBindings> lengths;
-    std::array<VkDeviceSize, MaxNumVertexBindings> strides;
-    
+    std::array<VkBuffer,     MaxNumVertexBindings> buffers = {};
+    std::array<VkDeviceSize, MaxNumVertexBindings> offsets = {};
+    std::array<VkDeviceSize, MaxNumVertexBindings> lengths = {};
+    std::array<VkDeviceSize, MaxNumVertexBindings> strides = {};
+    if (!m_device->features().extRobustness2.nullDescriptor)
+      buffers.fill(m_common->dummyResources().bufferHandle());
+
     bool oldDynamicStrides = m_flags.test(DxvkContextFlag::GpDynamicVertexStrides);
     bool newDynamicStrides = true;
 
@@ -6931,11 +6927,6 @@ namespace dxvk {
         }
 
         m_cmd->track(m_state.vi.vertexBuffers[binding].buffer(), DxvkAccess::Read);
-      } else {
-        buffers[i] = VK_NULL_HANDLE;
-        offsets[i] = 0;
-        lengths[i] = 0;
-        strides[i] = 0;
       }
     }
 

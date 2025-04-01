@@ -403,6 +403,8 @@ namespace dxvk {
 
       hr = device->InitialReset(pPresentationParameters, pFullscreenDisplayMode);
 
+      dxvkDevice->initResources();
+
       if (unlikely(FAILED(hr)))
         return hr;
 

@@ -97,6 +97,8 @@ extern "C" {
         dxvkInstance, dxvkAdapter, dxvkDevice,
         devFeatureLevel, Flags);
 
+      dxvkDevice->initResources();
+
       return device->QueryInterface(
         __uuidof(ID3D11Device),
         reinterpret_cast<void**>(ppDevice));
@@ -440,6 +442,7 @@ extern "C" {
       if (!ppDevice && !ppImmediateContext)
         return S_FALSE;
 
+      dxvkDevice->initResources();
       return S_OK;
     } catch (const DxvkError& e) {
       Logger::err("D3D11On12CreateDevice: Failed to create D3D11 device");

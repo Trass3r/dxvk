@@ -334,6 +334,8 @@ namespace dxvk {
     if (m_gammaView) {
       gammaDescriptor.imageView = m_gammaView->handle();
       gammaDescriptor.imageLayout = m_gammaView->image()->info().layout;
+    } else {
+      gammaDescriptor = m_device->dummyResources().imageSamplerDescriptor(VK_IMAGE_VIEW_TYPE_1D);
     }
 
     VkDescriptorImageInfo hudDescriptor = { };
@@ -341,6 +343,8 @@ namespace dxvk {
     if (m_hudView) {
       hudDescriptor.imageView = m_hudView->handle();
       hudDescriptor.imageLayout = m_hudImage->info().layout;
+    } else {
+      hudDescriptor = m_device->dummyResources().imageViewDescriptor(VK_IMAGE_VIEW_TYPE_2D, true);
     }
 
     VkDescriptorImageInfo cursorDescriptor = { };
@@ -355,6 +359,8 @@ namespace dxvk {
 
       cursorDescriptor.imageLayout = m_cursorImage->info().layout;
       cursorDescriptor.imageView = m_cursorView->handle();
+    } else {
+      cursorDescriptor = m_device->dummyResources().imageSamplerDescriptor(VK_IMAGE_VIEW_TYPE_2D);
     }
 
     std::array<VkWriteDescriptorSet, 4> descriptorWrites = {{
