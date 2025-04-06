@@ -65,6 +65,8 @@ d3d9_dll = shared_library(dxvk_name_prefix+'d3d9', d3d9_src, glsl_generator.proc
   link_args           : d3d9_ld_args,
   link_depends        : [ d3d9_link_depends ],
   kwargs              : dxvk_so_version,
+  cpp_pch             : '../pch/pch.h',
+  #cpp_args            : '-ftime-trace',
 )
 
 d3d9_dep = declare_dependency(

@@ -32,6 +32,8 @@ d3d8_dll = shared_library(dxvk_name_prefix+'d3d8', d3d8_src, d3d8_res,
   link_args           : d3d8_ld_args,
   link_depends        : [ d3d8_link_depends ],
   kwargs              : dxvk_so_version,
+  #cpp_pch             : '../pch/pch.h',
+  #cpp_args            : '-ftime-trace',
 )
 
 d3d8_dep = declare_dependency(

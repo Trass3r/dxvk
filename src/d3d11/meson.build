@@ -86,6 +86,8 @@ d3d11_dll = shared_library(dxvk_name_prefix+'d3d11', dxgi_common_src + d3d11_src
   link_args           : d3d11_ld_args,
   link_depends        : [ d3d11_link_depends ],
   kwargs              : dxvk_so_version,
+  cpp_pch             : '../pch/pch.h',
+  #cpp_args            : '-ftime-trace',
 )
 
 d3d11_dep = declare_dependency(

@@ -139,6 +139,8 @@ dxvk_lib = static_library('dxvk', dxvk_src, glsl_generator.process(dxvk_shaders)
   link_with           : [ util_lib, spirv_lib, wsi_lib ],
   dependencies        : [ vkcommon_dep ] + dxvk_extra_deps,
   include_directories : [ dxvk_include_path ],
+  cpp_pch             : '../pch/pch.h',
+  #cpp_args            : '-ftime-trace',
 )
 
 dxvk_dep = declare_dependency(

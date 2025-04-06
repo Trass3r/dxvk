@@ -29,6 +29,8 @@ dxgi_dll = shared_library(dxvk_name_prefix+'dxgi', dxgi_src, dxgi_res,
   link_args           : dxgi_ld_args,
   link_depends        : [ dxgi_link_depends ],
   kwargs              : dxvk_so_version,
+  cpp_pch             : '../pch/pch.h',
+  #cpp_args            : '-ftime-trace',
 )
 
 dxgi_dep = declare_dependency(
