@@ -44,14 +44,9 @@
 #define D3DPRESENT_FORCEIMMEDIATE              0x00000100L
 #endif
 
-// Missing in some versions of mingw headers
+// old MinGW headers had the wrong name
 #ifndef _MSC_VER
-namespace dxvk {
-  typedef struct _D3DDEVINFO_RESOURCEMANAGER
-  {
-    char dummy;
-  } D3DDEVINFO_RESOURCEMANAGER, * LPD3DDEVINFO_RESOURCEMANAGER;
-}
+#define D3DDEVINFO_RESOURCEMANAGER D3DDEVINFO_D3DRESOURCEMANAGER
 #endif
 
 // This is the managed pool on D3D9Ex, it's just hidden!
