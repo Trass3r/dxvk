@@ -1,6 +1,6 @@
 [binaries]
-c = 'arm64ec-w64-mingw32-gcc'
-cpp = 'arm64ec-w64-mingw32-g++'
+c = ['ccache', 'arm64ec-w64-mingw32-gcc']
+cpp = ['ccache', 'arm64ec-w64-mingw32-g++']
 ar = 'arm64ec-w64-mingw32-ar'
 strip = 'strip'
 windres = 'arm64ec-w64-mingw32-windres'
