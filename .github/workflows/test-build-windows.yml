@@ -52,7 +52,7 @@ jobs:
         & "${Env:COMSPEC}" /s /c "`"${Env:VSDEVCMD}`" -arch=x86 -host_arch=x64 -no_logo && set" `
           | % { , ($_ -Split '=', 2) } `
           | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
-        meson --buildtype release -Denable_dxgi=false -Denable_d3d8=false -Denable_d3d10=false -Denable_d3d11=false --backend vs2022 build-msvc-x86
+        meson --buildtype debugoptimized -Denable_dxgi=false -Denable_d3d8=false -Denable_d3d10=false -Denable_d3d11=false --backend vs2022 build-msvc-x86
         msbuild -m build-msvc-x86/dxvk.sln
 
     - name: Prepare artifacts
