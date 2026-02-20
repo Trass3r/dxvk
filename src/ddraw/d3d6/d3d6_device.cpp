@@ -1478,7 +1478,7 @@ namespace dxvk {
   HRESULT STDMETHODCALLTYPE D3D6Device::SetTexture(DWORD stage, IDirect3DTexture2 *texture) {
     D3D6DeviceLock lock = LockDevice();
 
-    Logger::debug(">>> D3D6Device::SetTexture");
+    Logger::debug(str::format(">>> D3D6Device::SetTexture ", stage, ": ", !texture ? "null" : str::format("Texture nr.[[1 - ", static_cast<D3D6Texture *>(texture)->m_texCount, "]] ")));
 
     if (unlikely(stage >= ddrawCaps::TextureStageCount)) {
       Logger::err(str::format("D3D6Device::SetTexture: Invalid texture stage: ", stage));

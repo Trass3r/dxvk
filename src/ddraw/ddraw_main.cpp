@@ -214,7 +214,7 @@ namespace dxvk {
 extern "C" {
 
   DLLEXPORT HRESULT __stdcall AcquireDDThreadLock() {
-    dxvk::Logger::debug("<<< AcquireDDThreadLock: Proxy");
+    //dxvk::Logger::debug("<<< AcquireDDThreadLock: Proxy");
 
     typedef HRESULT (__stdcall *AcquireDDThreadLock_t)();
     static AcquireDDThreadLock_t ProxiedAcquireDDThreadLock = nullptr;
@@ -471,7 +471,7 @@ extern "C" {
   }
 
   DLLEXPORT HRESULT __stdcall ReleaseDDThreadLock() {
-    dxvk::Logger::debug("<<< ReleaseDDThreadLock: Proxy");
+    //dxvk::Logger::debug("<<< ReleaseDDThreadLock: Proxy");
 
     typedef HRESULT (__stdcall *ReleaseDDThreadLock_t)();
     static ReleaseDDThreadLock_t ProxiedReleaseDDThreadLock = nullptr;

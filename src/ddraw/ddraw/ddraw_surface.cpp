@@ -272,7 +272,7 @@ namespace dxvk {
   }
 
   HRESULT STDMETHODCALLTYPE DDrawSurface::AddAttachedSurface(LPDIRECTDRAWSURFACE lpDDSAttachedSurface) {
-    Logger::debug("<<< DDrawSurface::AddAttachedSurface: Proxy");
+    Logger::debug(str::format("<<< DDrawSurface::AddAttachedSurface: nr. [[1-", m_surfCount, "]] <- nr.[[1-", static_cast<DDrawSurface *>(lpDDSAttachedSurface)->m_surfCount, "]] "));
 
     if (unlikely(lpDDSAttachedSurface == nullptr))
       return DDERR_INVALIDPARAMS;
@@ -300,7 +300,7 @@ namespace dxvk {
   }
 
   HRESULT STDMETHODCALLTYPE DDrawSurface::Blt(LPRECT lpDestRect, LPDIRECTDRAWSURFACE lpDDSrcSurface, LPRECT lpSrcRect, DWORD dwFlags, LPDDBLTFX lpDDBltFx) {
-    Logger::debug("<<< DDrawSurface::Blt: Proxy");
+    Logger::debug(str::format("<<< DDrawSurface::Blt: nr. [[1-", m_surfCount, "]] <- ", !lpDDSrcSurface ? "null" : str::format("nr.[[1-", static_cast<DDrawSurface *>(lpDDSrcSurface)->m_surfCount, "]] ")));
 
     RefreshD3D9Device();
     if (likely(m_d3d9Device != nullptr)) {
@@ -392,7 +392,7 @@ namespace dxvk {
   }
 
   HRESULT STDMETHODCALLTYPE DDrawSurface::BltFast(DWORD dwX, DWORD dwY, LPDIRECTDRAWSURFACE lpDDSrcSurface, LPRECT lpSrcRect, DWORD dwTrans) {
-    Logger::debug("<<< DDrawSurface::BltFast: Proxy");
+    Logger::debug(str::format("<<< DDrawSurface::BltFast: nr. [[1-", m_surfCount, "]] <- nr. [[1-", static_cast<DDrawSurface *>(lpDDSrcSurface)->m_surfCount, "]]"));
 
     RefreshD3D9Device();
     if (likely(m_d3d9Device != nullptr)) {

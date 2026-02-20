@@ -23,7 +23,7 @@ namespace dxvk {
 
     HRESULT STDMETHODCALLTYPE Load(LPDIRECT3DTEXTURE2 lpD3DTexture2);
 
-  private:
+  //private:
 
     static uint32_t  s_texCount;
     uint32_t         m_texCount = 0;
