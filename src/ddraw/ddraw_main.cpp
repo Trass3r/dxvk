@@ -6,6 +6,8 @@
 #include "ddraw/ddraw_interface.h"
 #include "ddraw7/ddraw7_interface.h"
 
+#include "hookfunction.h"
+
 namespace dxvk {
 
   Logger Logger::s_instance("ddraw.log");
@@ -495,15 +497,53 @@ extern "C" {
     return ProxiedReleaseDDThreadLock();
   }
 
+static DWORD __stdcall GetVersionHook()
+{
+	return 0xA280105u;
+}
+static bool __stdcall GetVersionExAHook(LPOSVERSIONINFOA info)
+{
+	info->dwMajorVersion = 5;
+	info->dwMinorVersion = 1;
+	return true;
+}
+
   BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
     switch (fdwReason) {
       case DLL_THREAD_ATTACH:
         break;
       case DLL_THREAD_DETACH:
         break;
-      case DLL_PROCESS_ATTACH:
+      case DLL_PROCESS_ATTACH: {
+        DisableThreadLibraryCalls(hinstDLL);
         dxvk::Logger::info(">>>>>>> LOADING D7VK >>>>>>>");
+        // get code section address range
+        auto processImageBase = (char*)GetModuleHandle(nullptr);
+        auto peHeader = (PIMAGE_NT_HEADERS)(processImageBase + ((IMAGE_DOS_HEADER*)processImageBase)->e_lfanew);
+        // NT headers are followed by the section table
+        auto sectionTable = (IMAGE_SECTION_HEADER*)(peHeader + 1);
+        assert(!strncmp(".text", (char*)sectionTable[0].Name, IMAGE_SIZEOF_SHORT_NAME));
+        auto textSectionStart = processImageBase + sectionTable[0].VirtualAddress;
+        auto textSectionLen = sectionTable[0].Misc.VirtualSize;
+        assert(!strncmp(".rdata", (char*)sectionTable[2].Name, IMAGE_SIZEOF_SHORT_NAME));
+        auto rdataSectionStart = processImageBase + sectionTable[2].VirtualAddress;
+        auto rdataSectionLen = sectionTable[2].Misc.VirtualSize;
+
+        // overwrite all functions
+        DWORD oldProtectText;
+        if (!VirtualProtect(textSectionStart, textSectionLen, PAGE_EXECUTE_READWRITE, &oldProtectText))
+          return false;
+        DWORD oldProtectData;
+        if (!VirtualProtect(rdataSectionStart, rdataSectionLen, PAGE_READWRITE, &oldProtectData))
+          return false;
+        overWriteMem(0x66C10C, &GetVersionHook);
+        overWriteMemDirectly(0x66C090, &GetVersionExAHook);
+        if (!VirtualProtect(textSectionStart, textSectionLen, oldProtectText, &oldProtectText))
+          return false;
+        if (!VirtualProtect(rdataSectionStart, rdataSectionLen, oldProtectData, &oldProtectData))
+          return false;
         break;
+      }
       case DLL_PROCESS_DETACH: {
         // Calling FreeLibrary on DLL_PROCESS_DETACH is technically discouraged,
         // however apitrace appears to do it with no ill effect, and I have no
