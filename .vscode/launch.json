@@ -1,0 +1,32 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "(Windows) Launch",
+			"type": "cppvsdbg",
+			"request": "launch",
+			//"visualizerFile": "",
+			"program": "DKII.EXE",
+			"args": ["-32biteverything", "-nomovies", "-level", "devtest"],
+			"stopAtEntry": false,
+			//"symbolSearchPath": "",
+			"symbolOptions": {
+				"searchPaths": [
+					//"C:\\Symbols",
+				],
+				"searchMicrosoftSymbolServer": true,
+				"cachePath": "C:\\Symbols",
+				"moduleFilter": {
+					"mode": "loadAllButExcluded",
+					"excludedModules": [
+						//"DoNotLookForThisOne*.dll"
+					]
+				}
+			},
+			"cwd": "C:\\Games\\DK2",
+			"environment": [],
+			"console": "internalConsole",
+			"internalConsoleOptions": "openOnSessionStart",
+		}
+	]
+}

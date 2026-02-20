@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Ninja Build",
+			"type": "shell",
+			"command": "ninja && xcopy /D/Y/F src\\ddraw\\ddraw.dll C:\\Games\\DK2",
+			"options": {
+				"cwd": "${workspaceFolder}/build",
+				"env": {
+					"VSLANG": "1033"
+				}
+			},
+			"problemMatcher": "$gcc",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+		},
+		{
+			"type": "meson",
+			"mode": "build",
+			"problemMatcher": [
+				"$meson-gcc"
+			],
+			"label": "Meson: Build all targets"
+		},
+		{
+			"label": "Configure",
+			"type": "shell",
+			"command": "meson --buildtype debugoptimized -Denable_dxgi=false -Denable_d3d8=false -Denable_d3d10=false -Denable_d3d11=false --backend ninja build",
+			"problemMatcher": []
+		}
+	]
+}
